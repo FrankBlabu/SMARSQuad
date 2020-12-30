@@ -5,7 +5,7 @@
 import argparse
 import logging
 
-import Adafruit_PCA9685
+import adafruit_servokit
 
 #-------------------------------------------------------------------
 # CLASS SmarsQuad
@@ -27,8 +27,7 @@ class SmarsQuad:
     LEFT_BACK_FOOT   = 7
 
     def __init__ (self):
-        self.pwm = Adafruit_PCA9685.PCA9685 ()
-        self.pwm.set_pwm_freq (60)
+        self.kit = adafruit_servokit.ServoKit (channels=8)
 
     def reset (self):
         self.set_leg (SmarsQuad.LEFT_FRONT_LEG, 0)
@@ -59,10 +58,7 @@ class SmarsQuad:
         if leg in turned:
             angle = 180 - angle
 
-        pulse_min = 150
-        pulse_max = 600
-
-        self.pwm.set_pwm (leg, 0, pulse_min + int (((pulse_max - pulse_min) * angle) / 180))
+        self.kit.servo[leg].angle = angle
 
 
 #-------------------------------------------------------------------
